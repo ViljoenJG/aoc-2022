@@ -27,7 +27,6 @@ defmodule AdventOfCode.Day01Test do
 
   test "part2" do
     result = part2(@input)
-
     assert result == 45000
   end
 end

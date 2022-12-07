@@ -4,28 +4,36 @@ defmodule AdventOfCode.Day07 do
   def part1(input) do
     input
     |> parse()
-    |> then(fn {_, dirs} ->
-      dirs
-      |> Map.values()
-      |> Enum.reduce(0, fn
-        x, acc when x <= 100_000 -> x + acc
-        _, acc -> acc
-      end)
-    end)
+    |> navigate_lines()
+    |> solve1()
   end
 
   def part2(input) do
     input
     |> parse()
-    |> then(fn {_, dirs} ->
-      size_req = Map.get(dirs, "/") - 40_000_000
-
-      dirs
-      |> Map.values()
-      |> Enum.filter(&(&1 >= size_req))
-      |> Enum.min()
+    |> navigate_lines()
+    |> then(fn {_path, dirs} ->
+      size = Map.get(dirs, "/") - 40_000_000
+      {size, dirs}
     end)
+    |> solve2()
   end
+
+  defp solve1({_path, dirs}) do
+    dirs
+    |> Map.values()
+    |> Enum.filter(&(&1 <= 100_000))
+    |> Enum.sum()
+  end
+
+  defp solve2({size_req, dirs}) do
+    dirs
+    |> Map.values()
+    |> Enum.filter(&(&1 >= size_req))
+    |> Enum.min()
+  end
+
+  defp navigate_lines(lines), do: Enum.reduce(lines, {[], %{}}, &navigate/2)
 
   defp navigate(["$", "cd", ".."], {[_ | path], dirs}), do: {path, dirs}
   defp navigate(["$", "cd", "/"], {_, dirs}), do: {["/"], dirs}
@@ -49,6 +57,5 @@ defmodule AdventOfCode.Day07 do
     input
     |> Utils.parse()
     |> Enum.map(&Utils.parse(&1, " "))
-    |> Enum.reduce({[], %{}}, &navigate/2)
   end
 end

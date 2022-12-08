@@ -9,9 +9,21 @@ defmodule AdventOfCode.Utils do
     |> String.split(sep, options)
   end
 
+  def parse_grid(input) do
+    input
+    |> parse("\n")
+    |> Enum.map(&parse(&1, ""))
+  end
+
+  def parse_grid_int(input) do
+    input
+    |> parse()
+    |> Enum.map(&parse_int(&1, ""))
+  end
+
   def parse_int(input) do
     input
-    |> parse
+    |> parse()
     |> Enum.map(&String.to_integer/1)
   end
 

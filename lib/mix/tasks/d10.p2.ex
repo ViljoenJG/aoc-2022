@@ -12,6 +12,10 @@ defmodule Mix.Tasks.D10.P2 do
       else:
         input
         |> part2()
-        |> IO.inspect(label: "Part 2 Results")
+        |> then(fn res ->
+          for line <- String.split(res, "\n") do
+            IO.puts(line)
+          end
+        end)
   end
 end
